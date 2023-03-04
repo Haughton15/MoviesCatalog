@@ -1,4 +1,4 @@
-package com.example.testandroid.ui.popular
+package com.example.testandroid.ui.top_rated
 
 import android.os.Bundle
 import android.util.Log
@@ -14,29 +14,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testandroid.R
 import com.example.testandroid.data.entities.MovieEntity
 import com.example.testandroid.data.model.ResourceStatus
-import com.example.testandroid.databinding.FragmentPopularBinding
+import com.example.testandroid.databinding.FragmentTopRatedBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
-@AndroidEntryPoint
-class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener {
-
-    private var _binding: FragmentPopularBinding? = null
+class TopRatedFragment: Fragment(), TopRatedMovieItemAdapter.OnMovieClickListener {
+    private var _binding: FragmentTopRatedBinding? = null
 
     private val binding get() = _binding!!
 
-    private val viewModel: PopularViewModel by navGraphViewModels(R.id.nav_graph) {
+    private val viewModel: TopRatedViewModel by navGraphViewModels(R.id.nav_graph) {
         defaultViewModelProviderFactory
     }
 
-    private lateinit var popularMovieItemAdapter: PopularMovieItemAdapter
+    private lateinit var topRatedMovieItemAdapter: TopRatedMovieItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPopularBinding.inflate(inflater, container, false)
+        _binding = FragmentTopRatedBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -46,18 +43,18 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
 
         binding.rvMovies.layoutManager = LinearLayoutManager(context)
 
-        viewModel.fetchPopularMovies.observe(viewLifecycleOwner, Observer {
+        viewModel.fetchTopRatedMovies.observe(viewLifecycleOwner, Observer {
             when (it.resourceStatus) {
                 ResourceStatus.LOADING -> {
-                    Log.e("fetchPopularMovies", "Loading")
+                    Log.e("fetchTopRatedMovies", "Loading")
                 }
                 ResourceStatus.SUCCESS  -> {
-                    Log.e("fetchPopularMovies", "Success")
-                    popularMovieItemAdapter = PopularMovieItemAdapter(it.data!!, this@PopularFragment)
-                    binding.rvMovies.adapter = popularMovieItemAdapter
+                    Log.e("fetchTopRatedMovies", "Success")
+                    topRatedMovieItemAdapter = TopRatedMovieItemAdapter(it.data!!, this@TopRatedFragment)
+                    binding.rvMovies.adapter = topRatedMovieItemAdapter
                 }
                 ResourceStatus.ERROR -> {
-                    Log.e("fetchPopularMovies", "Failure: ${it.message} ")
+                    Log.e("fetchTopRatedMovies", "Failure: ${it.message} ")
                     Toast.makeText(requireContext(), "Failure: ${it.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -71,7 +68,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     }
 
     override fun onMovieClick(movieEntity: MovieEntity) {
-       // val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
+       // val action = TopRatedFragmentDirections.actionTopRatedFragmentToDetailFragment(movieEntity)
         //findNavController().navigate(action)
     }
 }

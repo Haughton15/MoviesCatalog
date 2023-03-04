@@ -1,4 +1,4 @@
-package com.example.testandroid.ui.popular
+package com.example.testandroid.ui.upcoming
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class PopularViewModel @Inject constructor (private val repository: MovieRepository) : ViewModel() {
+class UpcomingViewModel @Inject constructor (private val repository: MovieRepository) : ViewModel() {
 
-    val fetchPopularMovies: LiveData<Resource<List<MovieEntity>>> = repository.getPopularMovies()
+    val fetchUpcomingMovie: LiveData<Resource<List<MovieEntity>>> = repository.getPopularMovies()
 }

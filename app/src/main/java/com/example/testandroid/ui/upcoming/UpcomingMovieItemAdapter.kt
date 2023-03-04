@@ -1,5 +1,4 @@
-package com.example.testandroid.ui.popular
-
+package com.example.testandroid.ui.upcoming
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,34 +6,32 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.data.entities.MovieEntity
 import com.example.testandroid.data.model.Movie
 import com.example.testandroid.databinding.ItemMovieBinding
-import com.example.testandroid.ui.top_rated.TopRatedFragment
 import com.example.testandroid.utils.DateUtils
 import com.squareup.picasso.Picasso
-
-class PopularMovieItemAdapter(
+class UpcomingMovieItemAdapter (
     private val moviesList: List<MovieEntity>,
     private val itemClickListener: OnMovieClickListener
-) : RecyclerView.Adapter<PopularMovieItemAdapter.PopularViewHolder>()  {
+) : RecyclerView.Adapter<UpcomingMovieItemAdapter.UpcomingViewHolder>()  {
 
     interface OnMovieClickListener {
         fun onMovieClick(movieEntity: MovieEntity)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpcomingViewHolder {
         val binding  = ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PopularViewHolder(binding)
+        return UpcomingViewHolder(binding)
     }
 
     override fun getItemCount() = moviesList.size
 
-    override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UpcomingViewHolder, position: Int) {
         with(holder){
             with(moviesList[position]) {
                 binding.titleMovieText.text = title
                 binding.overviewMovieText.text = overview
                 binding.percentageMovieText.text = voteAverage.toString()
                 binding.releaseMovieText.text = releaseDate
-                Picasso.get()
+                com.squareup.picasso.Picasso.get()
                     .load("https://image.tmdb.org/t/p/w500" + (posterPath ?: ""))
                     .into(binding.posterMovieImage)
 
@@ -45,7 +42,6 @@ class PopularMovieItemAdapter(
         }
     }
 
-    inner class PopularViewHolder(val binding: ItemMovieBinding)
-        :RecyclerView.ViewHolder(binding.root)
-
+    inner class UpcomingViewHolder(val binding: ItemMovieBinding)
+        : RecyclerView.ViewHolder(binding.root)
 }
