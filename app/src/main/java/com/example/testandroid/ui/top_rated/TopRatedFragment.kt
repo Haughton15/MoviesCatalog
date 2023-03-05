@@ -68,7 +68,7 @@ class TopRatedFragment: Fragment(), TopRatedMovieItemAdapter.OnMovieClickListene
     }
 
     override fun onMovieClick(movieEntity: MovieEntity) {
-       // val action = TopRatedFragmentDirections.actionTopRatedFragmentToDetailFragment(movieEntity)
+       //val action = TopRatedFragmentDirections.actionTopRatedFragmentToDetailFragment(movieEntity)
         //findNavController().navigate(action)
     }
 }

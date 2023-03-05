@@ -15,5 +15,5 @@ import javax.inject.Inject
 @HiltViewModel
 class UpcomingViewModel @Inject constructor (private val repository: MovieRepository) : ViewModel() {
 
-    val fetchUpcomingMovie: LiveData<Resource<List<MovieEntity>>> = repository.getPopularMovies()
+    val fetchUpcomingMovie: LiveData<Resource<List<MovieEntity>>> = repository.getUpcomingMovies()
 }

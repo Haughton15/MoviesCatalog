@@ -71,7 +71,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     }
 
     override fun onMovieClick(movieEntity: MovieEntity) {
-       // val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
+        //val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
         //findNavController().navigate(action)
     }
 }
