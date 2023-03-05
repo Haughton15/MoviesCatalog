@@ -13,8 +13,10 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testandroid.R
 import com.example.testandroid.data.entities.MovieEntity
+import com.example.testandroid.data.model.Movie
 import com.example.testandroid.data.model.ResourceStatus
 import com.example.testandroid.databinding.FragmentPopularBinding
+import com.example.testandroid.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -71,7 +73,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     }
 
     override fun onMovieClick(movieEntity: MovieEntity) {
-        //val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
-        //findNavController().navigate(action)
+        val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
+        findNavController().navigate(action)
     }
 }

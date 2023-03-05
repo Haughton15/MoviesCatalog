@@ -7,11 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.data.entities.MovieEntity
 import com.example.testandroid.data.model.Movie
 import com.example.testandroid.databinding.ItemMovieBinding
-import com.example.testandroid.ui.top_rated.TopRatedFragment
 import com.example.testandroid.utils.DateUtils
 import com.squareup.picasso.Picasso
 
-class PopularMovieItemAdapter(
+class PopularMovieItemAdapter (
     private val moviesList: List<MovieEntity>,
     private val itemClickListener: OnMovieClickListener
 ) : RecyclerView.Adapter<PopularMovieItemAdapter.PopularViewHolder>()  {

@@ -5,9 +5,5 @@ import com.example.testandroid.utils.BaseDataSource
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val apiServices: ApiService) : BaseDataSource() {
-    suspend fun getPopularMovies() = getResult { apiServices.getPopularMovies(Const.API_KEY)}
-
-    suspend fun getTopRatedMovies() = getResult { apiServices.getTopRatedMovies(Const.API_KEY)}
-
-    suspend fun getUpcomingMovies() = getResult { apiServices.getUpcomingMovies(Const.API_KEY)}
+    suspend fun getPopularMovies() = getResult { apiServices.getPopularMovies(Const.API_KEY) }
 }
