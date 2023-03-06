@@ -17,6 +17,8 @@ import com.example.testandroid.data.model.ResourceStatus
 import com.example.testandroid.databinding.FragmentTopRatedBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class TopRatedFragment: Fragment(), TopRatedMovieItemAdapter.OnMovieClickListener {
     private var _binding: FragmentTopRatedBinding? = null
 
@@ -68,7 +70,7 @@ class TopRatedFragment: Fragment(), TopRatedMovieItemAdapter.OnMovieClickListene
     }
 
     override fun onMovieClick(movieEntity: MovieEntity) {
-       //val action = TopRatedFragmentDirections.actionTopRatedFragmentToDetailFragment(movieEntity)
-        //findNavController().navigate(action)
+       val action = TopRatedFragmentDirections.actionTopRatedFragmentToDetailFragment(movieEntity)
+        findNavController().navigate(action)
     }
 }

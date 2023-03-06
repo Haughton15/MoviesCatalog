@@ -17,7 +17,6 @@ import com.example.testandroid.data.model.ResourceStatus
 import com.example.testandroid.databinding.FragmentPopularBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener {
 
@@ -71,7 +70,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     }
 
     override fun onMovieClick(movieEntity: MovieEntity) {
-        //val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
-        //findNavController().navigate(action)
+        val action = PopularFragmentDirections.actionHomeFragmentToDetailFragment(movieEntity)
+        findNavController().navigate(action)
     }
 }

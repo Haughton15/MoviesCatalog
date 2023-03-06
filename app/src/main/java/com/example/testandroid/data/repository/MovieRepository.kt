@@ -19,7 +19,7 @@ class MovieRepository @Inject constructor(
     fun getTopRatedMovies() = performGetOperation(
         databaseQuery = { localDataSource.getAllMovies(MovieType.TOP_RATED.value) },
         networkCall = { remoteDataSource.getTopRatedMovies() },
-        saveCallResult = { localDataSource.insertAll(it.results.toMovieEntityList(MovieType.POPULAR.value)) }
+        saveCallResult = { localDataSource.insertAll(it.results.toMovieEntityList(MovieType.TOP_RATED.value)) }
     )
 
     fun getUpcomingMovies() = performGetOperation(

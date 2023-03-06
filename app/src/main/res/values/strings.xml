@@ -17,7 +17,9 @@
     <string name="label_overview">Overview</string>
     <string name="lorem_title">Lorem ipsum dolor sit amet.</string>
     <string name="lorem_description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna. Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</string>
-    <string name="label_popular_movie">Popular Movie</string>
+    <string name="label_popular_movie">Popular Movies</string>
+    <string name="label_top_rated_movie">Top Rated Movies</string>
+    <string name="label_upcoming_movie">Upcoming Movies</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
     <string name="upcoming">Upcoming</string>
