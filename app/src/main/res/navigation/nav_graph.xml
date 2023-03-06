@@ -29,7 +29,7 @@
         tools:layout="@layout/fragment_top_rated" />
     <fragment
         android:id="@+id/upComing"
-        android:name="com.example.testandroid.ui.upcoming.UpComing"
+        android:name="com.example.testandroid.ui.upcoming.UpcomingFragment"
         android:label="fragment_up_coming"
         tools:layout="@layout/fragment_up_coming" />
 </navigation>
