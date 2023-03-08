@@ -1,5 +1,6 @@
 package com.example.testandroid.ui.popular
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.R
 import com.example.testandroid.data.entities.MovieEntity
 import com.example.testandroid.data.model.ResourceStatus
@@ -23,6 +25,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     private var _binding: FragmentPopularBinding? = null
 
     private val binding get() = _binding!!
+    private var loading = true
 
     private val viewModel: PopularViewModel by navGraphViewModels(R.id.nav_graph) {
         defaultViewModelProviderFactory
@@ -42,9 +45,26 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.rvMovies.layoutManager = LinearLayoutManager(context)
-
+        val recyclerview = binding.rvMovies
+        recyclerview.layoutManager = LinearLayoutManager(context)
+        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val visibleItemCount = layoutManager.childCount
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                val endHasBeenReached = lastVisible + visibleItemCount >= totalItemCount
+                if (totalItemCount > 0 && endHasBeenReached && loading) {
+                    loading=false
+                    //viewModel.fetchPopularMovies(
+                    Toast.makeText(requireContext(), "Loading more", Toast.LENGTH_SHORT).show()
+                    //popularMovieItemAdapter.notifyDataSetChanged()
+                    loading=true
+                }
+            }
+        })
         viewModel.fetchPopularMovies.observe(viewLifecycleOwner, Observer {
             when (it.resourceStatus) {
                 ResourceStatus.LOADING -> {
