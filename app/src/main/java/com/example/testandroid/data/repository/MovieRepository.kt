@@ -4,6 +4,7 @@ import com.example.testandroid.data.local.MovieDao
 import com.example.testandroid.data.model.MovieType
 import com.example.testandroid.data.model.toMovieEntityList
 import com.example.testandroid.data.remote.RemoteDataSource
+import com.example.testandroid.utils.PageUtils
 import javax.inject.Inject
 import com.example.testandroid.utils.performGetOperation
 
@@ -12,7 +13,7 @@ class MovieRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource) {
     fun getPopularMovies() = performGetOperation(
         databaseQuery = { localDataSource.getAllMovies(MovieType.POPULAR.value) },
-        networkCall = { remoteDataSource.getPopularMovies() },
+        networkCall = { remoteDataSource.getPopularMovies(PageUtils.popularPage) },
         saveCallResult = { localDataSource.insertAll(it.results.toMovieEntityList(MovieType.POPULAR.value)) }
     )
 

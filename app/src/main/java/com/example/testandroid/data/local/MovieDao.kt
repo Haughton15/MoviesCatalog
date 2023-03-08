@@ -3,7 +3,6 @@ package com.example.testandroid.data.local
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.testandroid.data.entities.MovieEntity
-import com.example.testandroid.data.model.MovieType
 
 @Dao
 interface MovieDao {

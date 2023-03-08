@@ -17,6 +17,7 @@ import com.example.testandroid.R
 import com.example.testandroid.data.entities.MovieEntity
 import com.example.testandroid.data.model.ResourceStatus
 import com.example.testandroid.databinding.FragmentPopularBinding
+import com.example.testandroid.utils.PageUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +33,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     }
 
     private lateinit var popularMovieItemAdapter: PopularMovieItemAdapter
+    private lateinit var pageUtils: PageUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +61,11 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
                 if (totalItemCount > 0 && endHasBeenReached && loading) {
                     loading=false
                     //viewModel.fetchPopularMovies(
+                    Log.e("fetchPopularMovies", "Loading more")
                     Toast.makeText(requireContext(), "Loading more", Toast.LENGTH_SHORT).show()
+                    pageUtils = PageUtils
+                    PageUtils.popularPage += 1
+                    println("PRINT-----------------------" + pageUtils.popularPage)
                     //popularMovieItemAdapter.notifyDataSetChanged()
                     loading=true
                 }

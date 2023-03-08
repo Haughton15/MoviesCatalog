@@ -7,6 +7,7 @@ import com.example.testandroid.data.local.MovieDao
 import com.example.testandroid.data.remote.ApiService
 import com.example.testandroid.data.remote.RemoteDataSource
 import com.example.testandroid.data.repository.MovieRepository
+import com.example.testandroid.utils.PageUtils
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
