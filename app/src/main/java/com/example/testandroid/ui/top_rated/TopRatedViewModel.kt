@@ -24,23 +24,19 @@ class TopRatedViewModel @Inject constructor (private val repository: MovieReposi
     }
     fun loadNextPage() {
         _topRatedMovies.value = Resource.loading(null)
-
-        viewModelScope.launch {
-            repository.getTopRatedMovies(currentPage).observeForever { result ->
-                when (result.resourceStatus) {
-                    ResourceStatus.SUCCESS -> {
-                        currentPage++
-                        val oldList = _topRatedMovies.value?.data ?: emptyList()
-                        val newList = oldList + result.data!!
-                        _topRatedMovies.value = Resource.success(newList)
-
-                    }
-                    ResourceStatus.ERROR -> {
-                        _topRatedMovies.value = Resource.error(result.message!!, null)
-                    }
-                    ResourceStatus.LOADING -> {
-                        _topRatedMovies.value = Resource.loading(null)
-                    }
+        repository.getPopularMovies(currentPage).observeForever { result ->
+            when (result.resourceStatus) {
+                ResourceStatus.SUCCESS -> {
+                    val oldList = _topRatedMovies.value?.data ?: emptyList()
+                    val newList = result.data!!
+                    _topRatedMovies.value = Resource.success(newList)
+                    currentPage++
+                }
+                ResourceStatus.ERROR -> {
+                    _topRatedMovies.value = Resource.error(result.message!!, null)
+                }
+                ResourceStatus.LOADING -> {
+                    _topRatedMovies.value = Resource.loading(null)
                 }
             }
         }

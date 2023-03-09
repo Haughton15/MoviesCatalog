@@ -23,23 +23,19 @@ import javax.inject.Inject
         }
         fun loadNextPage() {
             _popularMovies.value = Resource.loading(null)
-
-            viewModelScope.launch {
-                repository.getPopularMovies(currentPage).observeForever { result ->
-                    when (result.resourceStatus) {
-                        ResourceStatus.SUCCESS -> {
-                            currentPage++
-                            val oldList = _popularMovies.value?.data ?: emptyList()
-                            val newList = oldList + result.data!!
-                            _popularMovies.value = Resource.success(newList)
-
-                        }
-                        ResourceStatus.ERROR -> {
-                            _popularMovies.value = Resource.error(result.message!!, null)
-                        }
-                        ResourceStatus.LOADING -> {
-                            _popularMovies.value = Resource.loading(null)
-                        }
+            repository.getPopularMovies(currentPage).observeForever { result ->
+                when (result.resourceStatus) {
+                    ResourceStatus.SUCCESS -> {
+                        val oldList = _popularMovies.value?.data ?: emptyList()
+                        val newList = result.data!!
+                        _popularMovies.value = Resource.success(newList)
+                        currentPage++
+                    }
+                    ResourceStatus.ERROR -> {
+                        _popularMovies.value = Resource.error(result.message!!, null)
+                    }
+                    ResourceStatus.LOADING -> {
+                        _popularMovies.value = Resource.loading(null)
                     }
                 }
             }

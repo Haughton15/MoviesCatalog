@@ -24,23 +24,19 @@ class UpcomingViewModel @Inject constructor (private val repository: MovieReposi
     }
     fun loadNextPage() {
         _upcomingMovies.value = Resource.loading(null)
-
-        viewModelScope.launch {
-            repository.getUpcomingMovies(currentPage).observeForever { result ->
-                when (result.resourceStatus) {
-                    ResourceStatus.SUCCESS -> {
-                        currentPage++
-                        val oldList = _upcomingMovies.value?.data ?: emptyList()
-                        val newList = oldList + result.data!!
-                        _upcomingMovies.value = Resource.success(newList)
-
-                    }
-                    ResourceStatus.ERROR -> {
-                        _upcomingMovies.value = Resource.error(result.message!!, null)
-                    }
-                    ResourceStatus.LOADING -> {
-                        _upcomingMovies.value = Resource.loading(null)
-                    }
+        repository.getPopularMovies(currentPage).observeForever { result ->
+            when (result.resourceStatus) {
+                ResourceStatus.SUCCESS -> {
+                    val oldList = _upcomingMovies.value?.data ?: emptyList()
+                    val newList = result.data!!
+                    _upcomingMovies.value = Resource.success(newList)
+                    currentPage++
+                }
+                ResourceStatus.ERROR -> {
+                    _upcomingMovies.value = Resource.error(result.message!!, null)
+                }
+                ResourceStatus.LOADING -> {
+                    _upcomingMovies.value = Resource.loading(null)
                 }
             }
         }
