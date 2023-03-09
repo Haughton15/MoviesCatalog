@@ -1,16 +1,15 @@
 package com.example.testandroid.ui.upcoming
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.data.entities.MovieEntity
-import com.example.testandroid.data.model.Movie
 import com.example.testandroid.databinding.ItemMovieBinding
-import com.example.testandroid.utils.DateUtils
-import com.squareup.picasso.Picasso
-class UpcomingMovieItemAdapter (
-    private val moviesList: List<MovieEntity>,
-    private val itemClickListener: OnMovieClickListener
+
+class UpcomingMovieItemAdapter(
+    private val moviesList: MutableList<MovieEntity>,
+    private val itemClickListener: UpcomingFragment
 ) : RecyclerView.Adapter<UpcomingMovieItemAdapter.UpcomingViewHolder>()  {
 
     interface OnMovieClickListener {
@@ -42,6 +41,10 @@ class UpcomingMovieItemAdapter (
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newData: List<MovieEntity>) {
+        moviesList.addAll(newData)
+    }
     inner class UpcomingViewHolder(val binding: ItemMovieBinding)
         : RecyclerView.ViewHolder(binding.root)
 }

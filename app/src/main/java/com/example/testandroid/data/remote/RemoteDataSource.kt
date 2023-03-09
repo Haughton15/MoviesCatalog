@@ -11,7 +11,7 @@ class RemoteDataSource @Inject constructor(private val apiServices: ApiService) 
 
     suspend fun getPopularMovies(pageUtils: Int) = getResult { apiServices.getPopularMovies(Const.API_KEY, pageUtils)}
 
-    suspend fun getTopRatedMovies() = getResult { apiServices.getTopRatedMovies(Const.API_KEY)}
+    suspend fun getTopRatedMovies(pageUtils: Int) = getResult { apiServices.getTopRatedMovies(Const.API_KEY, pageUtils)}
 
-    suspend fun getUpcomingMovies() = getResult { apiServices.getUpcomingMovies(Const.API_KEY)}
+    suspend fun getUpcomingMovies(pageUtils: Int) = getResult { apiServices.getUpcomingMovies(Const.API_KEY, pageUtils)}
 }

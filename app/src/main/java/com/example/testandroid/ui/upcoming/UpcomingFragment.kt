@@ -10,7 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.R
 import com.example.testandroid.data.entities.MovieEntity
 import com.example.testandroid.data.model.ResourceStatus
@@ -23,18 +25,19 @@ class UpcomingFragment: Fragment(), UpcomingMovieItemAdapter.OnMovieClickListene
     private var _binding: FragmentUpcomingBinding? = null
 
     private val binding get() = _binding!!
+    private var loading = true
 
     private val viewModel: UpcomingViewModel by navGraphViewModels(R.id.nav_graph) {
         defaultViewModelProviderFactory
     }
 
     private lateinit var upcomingMovieItemAdapter: UpcomingMovieItemAdapter
+    private lateinit var adapter: PagingDataAdapter<MovieEntity, UpcomingMovieItemAdapter.UpcomingViewHolder>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,17 +45,35 @@ class UpcomingFragment: Fragment(), UpcomingMovieItemAdapter.OnMovieClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.rvMovies.layoutManager = LinearLayoutManager(context)
-
-        viewModel.fetchUpcomingMovie.observe(viewLifecycleOwner, Observer {
+        val recyclerview = binding.rvMovies
+        recyclerview.layoutManager = LinearLayoutManager(context)
+        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val visibleItemCount = layoutManager.childCount
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+                if (visibleItemCount + firstVisibleItem >= totalItemCount && firstVisibleItem >= 0 && loading) {
+                    loading = false
+                    Log.e("fetchUpcomingMovies", "El usuario llego al final de la lista y scroll")
+                    viewModel.loadNextPage()
+                }
+            }
+        })
+        viewModel.upcomingMovies.observe(viewLifecycleOwner, Observer {
             when (it.resourceStatus) {
                 ResourceStatus.LOADING -> {
                     Log.e("fetchUpcomingMovies", "Loading")
                 }
                 ResourceStatus.SUCCESS  -> {
+                    /*if (::popularMovieItemAdapter.isInitialized) {
+                        popularMovieItemAdapter.updateData(it.data!!)
+                    } else {
+                        popularMovieItemAdapter = PopularMovieItemAdapter(it.data!! as MutableList<MovieEntity>, this@PopularFragment)
+                    }*/
                     Log.e("fetchUpcomingMovies", "Success")
-                    upcomingMovieItemAdapter = UpcomingMovieItemAdapter(it.data!!, this@UpcomingFragment)
+                    upcomingMovieItemAdapter = UpcomingMovieItemAdapter(it.data!!as MutableList<MovieEntity>, this@UpcomingFragment)
                     binding.rvMovies.adapter = upcomingMovieItemAdapter
                 }
                 ResourceStatus.ERROR -> {
