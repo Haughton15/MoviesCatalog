@@ -35,7 +35,6 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
     }
 
     private lateinit var popularMovieItemAdapter: PopularMovieItemAdapter
-    private lateinit var pageUtils: PageUtils
     private lateinit var adapter: PagingDataAdapter<MovieEntity,PopularMovieItemAdapter.PopularViewHolder>
 
     override fun onCreateView(
@@ -52,16 +51,12 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
         super.onViewCreated(view, savedInstanceState)
         val recyclerview = binding.rvMovies
         recyclerview.layoutManager = LinearLayoutManager(context)
-        adapter = PagingDataAdapter(
-            diffCallback = object : DiffUtil.ItemCallback<MovieEntity>() {
-                override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
-                    return oldItem.id == newItem.id
-                }
-                override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
-                    return oldItem == newItem
-                }
-            }
-        )
+        recyclerview.adapter = popularMovieItemAdapter
+
+        viewModel.popularMovies.observe(viewLifecycleOwner) {
+            adapter.submitData(lifecycle, it)
+            popularMovieItemAdapter = PopularMovieItemAdapter(it, this@PopularFragment)
+        }
         /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
             @SuppressLint("NotifyDataSetChanged")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

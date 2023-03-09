@@ -27,7 +27,7 @@ class PopularViewModel @Inject constructor (private val repository: MovieReposit
     private val pageSize = 20 // tamaño de la página
 
     // crear una instancia de la clase PagingSource
-    private val popularPagingSource = object : PagingSource<Int, MovieEntity>() {
+    val popularPagingSource = object : PagingSource<Int, MovieEntity>() {
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieEntity> {
             val page = params.key ?: 1 // página inicial
             val response = repository.getPopularMovies(page)

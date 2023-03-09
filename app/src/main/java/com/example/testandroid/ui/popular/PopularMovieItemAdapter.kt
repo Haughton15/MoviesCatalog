@@ -3,18 +3,18 @@ package com.example.testandroid.ui.popular
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.view.menu.MenuView.ItemView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.data.entities.MovieEntity
-import com.example.testandroid.data.model.Movie
 import com.example.testandroid.databinding.ItemMovieBinding
-import com.example.testandroid.ui.top_rated.TopRatedFragment
-import com.example.testandroid.utils.DateUtils
 import com.squareup.picasso.Picasso
 
 class PopularMovieItemAdapter(
     private val moviesList: List<MovieEntity>,
     private val itemClickListener: OnMovieClickListener
-) : RecyclerView.Adapter<PopularMovieItemAdapter.PopularViewHolder>()  {
+) : PagingDataAdapter<MovieEntity, PopularMovieItemAdapter.PopularViewHolder>(MyDiffCallback)  {
 
     interface OnMovieClickListener {
         fun onMovieClick(movieEntity: MovieEntity)
@@ -45,6 +45,14 @@ class PopularMovieItemAdapter(
         }
     }
 
+    object MyDiffCallback : DiffUtil.ItemCallback<MovieEntity>() {
+        override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+        override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem == newItem
+        }
+    }
     inner class PopularViewHolder(val binding: ItemMovieBinding)
         :RecyclerView.ViewHolder(binding.root)
 
