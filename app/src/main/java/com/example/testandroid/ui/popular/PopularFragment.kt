@@ -54,52 +54,34 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
         super.onViewCreated(view, savedInstanceState)
         val recyclerview = binding.rvMovies
         recyclerview.layoutManager = LinearLayoutManager(context)
-        //recyclerview.adapter = popularMovieItemAdapter
-        popularMovieItemAdapter = PopularMovieItemAdapter( this@PopularFragment)
-        binding.rvMovies.adapter = popularMovieItemAdapter
-        lifecycleScope.launch {
-            viewModel.flow.collectLatest { pagingData ->
-                popularMovieItemAdapter.submitData(pagingData)
-            }
-        }
-        /*viewModel.popularMovies.observe(viewLifecycleOwner) {
-            popularMovieItemAdapter.submitData(lifecycle, it)
-            //popularMovieItemAdapter = PopularMovieItemAdapter(, this@PopularFragment)
-        }*/
-        /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
-            @SuppressLint("NotifyDataSetChanged")
+        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val totalItemCount = layoutManager.itemCount
                 val visibleItemCount = layoutManager.childCount
-                val lastVisible = layoutManager.findLastVisibleItemPosition()
-                val endHasBeenReached = lastVisible + visibleItemCount >= totalItemCount
-                if (totalItemCount > 0 && endHasBeenReached && loading) {
-                    loading=false
-                    //viewModel.fetchPopularMovies(
-                    Log.e("fetchPopularMovies", "Loading more")
-                    Toast.makeText(requireContext(), "Loading more", Toast.LENGTH_SHORT).show()
-                    pageUtils = PageUtils
-                    PageUtils.popularPage += 1
-                    //viewModel.notifylastVisible(layoutManager.findLastVisibleItemPosition())
-                    println("PRINT-----------------------" + pageUtils.popularPage)
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
-                    //popularMovieItemAdapter.notifyDataSetChanged()
-                    loading=true
+                if (visibleItemCount + firstVisibleItem >= totalItemCount && firstVisibleItem >= 0 && loading) {
+                    loading = false
+                    Log.e("fetchPopularMovies", "El usuario llego al final de la lista y scroll")
+                    viewModel.loadNextPage()
                 }
-
-
             }
-        })*/
-        /*viewModel.fetchPopularMovies.observe(viewLifecycleOwner, Observer {
+        })
+        viewModel.popularMovies.observe(viewLifecycleOwner, Observer {
             when (it.resourceStatus) {
                 ResourceStatus.LOADING -> {
                     Log.e("fetchPopularMovies", "Loading")
                 }
                 ResourceStatus.SUCCESS  -> {
+                    /*if (::popularMovieItemAdapter.isInitialized) {
+                        popularMovieItemAdapter.updateData(it.data!!)
+                    } else {
+                        popularMovieItemAdapter = PopularMovieItemAdapter(it.data!! as MutableList<MovieEntity>, this@PopularFragment)
+                    }*/
                     Log.e("fetchPopularMovies", "Success")
-                    popularMovieItemAdapter = PopularMovieItemAdapter(it.data!!, this@PopularFragment)
+                    popularMovieItemAdapter = PopularMovieItemAdapter(it.data!!as MutableList<MovieEntity>, this@PopularFragment)
                     binding.rvMovies.adapter = popularMovieItemAdapter
                 }
                 ResourceStatus.ERROR -> {
@@ -108,7 +90,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
                         .show()
                 }
             }
-        })*/
+        })
     }
 
     override fun onDestroyView() {
