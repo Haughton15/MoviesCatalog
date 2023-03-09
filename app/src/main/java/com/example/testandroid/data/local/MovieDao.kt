@@ -3,6 +3,7 @@ package com.example.testandroid.data.local
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.testandroid.data.entities.MovieEntity
+//import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
@@ -15,5 +16,6 @@ interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(movieEntity: MovieEntity)
+
 
 }

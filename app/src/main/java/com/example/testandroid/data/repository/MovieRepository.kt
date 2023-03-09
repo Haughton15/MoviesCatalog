@@ -11,9 +11,17 @@ import com.example.testandroid.utils.performGetOperation
 class MovieRepository @Inject constructor(
     private val localDataSource: MovieDao,
     private val remoteDataSource: RemoteDataSource) {
-    fun getPopularMovies() = performGetOperation(
+
+    init {
+        //checkRequireNewPage(0)
+    }
+    companion object{
+        const val PAGE_SIZE =20
+        const val  PAGE_THRESHOLD=4
+    }
+    fun getPopularMovies(page:Int) = performGetOperation(
         databaseQuery = { localDataSource.getAllMovies(MovieType.POPULAR.value) },
-        networkCall = { remoteDataSource.getPopularMovies(PageUtils.popularPage) },
+        networkCall = { remoteDataSource.getPopularMovies(page) },
         saveCallResult = { localDataSource.insertAll(it.results.toMovieEntityList(MovieType.POPULAR.value)) }
     )
 
@@ -28,4 +36,8 @@ class MovieRepository @Inject constructor(
         networkCall = { remoteDataSource.getUpcomingMovies() },
         saveCallResult = { localDataSource.insertAll(it.results.toMovieEntityList(MovieType.UPCOMING.value)) }
     )
+
+    /*fun checkRequireNewPage(lastVisible: Int) {
+        val size = localDataSource.size()
+    }*/
 }

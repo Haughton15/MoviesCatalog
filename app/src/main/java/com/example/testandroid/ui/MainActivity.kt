@@ -8,7 +8,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.FrameLayout
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.testandroid.R
@@ -41,5 +43,16 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController,appBarConfiguration)
         bottomNavigationView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener{ _, nd : NavDestination, _ ->
+            if(nd.id == R.id.homeFragment ||
+                nd.id == R.id.topRatedFragment  ||
+                nd.id == R.id.upcomingFragment) {
+                bottomNavigationView.visibility = View.VISIBLE
+            }else{
+
+                bottomNavigationView.visibility = View.GONE
+            }
+
+        }
     }
 }

@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testandroid.R
@@ -34,6 +36,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
 
     private lateinit var popularMovieItemAdapter: PopularMovieItemAdapter
     private lateinit var pageUtils: PageUtils
+    private lateinit var adapter: PagingDataAdapter<MovieEntity,PopularMovieItemAdapter.PopularViewHolder>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +52,17 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
         super.onViewCreated(view, savedInstanceState)
         val recyclerview = binding.rvMovies
         recyclerview.layoutManager = LinearLayoutManager(context)
-        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
+        adapter = PagingDataAdapter(
+            diffCallback = object : DiffUtil.ItemCallback<MovieEntity>() {
+                override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+                    return oldItem.id == newItem.id
+                }
+                override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+                    return oldItem == newItem
+                }
+            }
+        )
+        /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
             @SuppressLint("NotifyDataSetChanged")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -65,13 +78,17 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
                     Toast.makeText(requireContext(), "Loading more", Toast.LENGTH_SHORT).show()
                     pageUtils = PageUtils
                     PageUtils.popularPage += 1
+                    //viewModel.notifylastVisible(layoutManager.findLastVisibleItemPosition())
                     println("PRINT-----------------------" + pageUtils.popularPage)
+
                     //popularMovieItemAdapter.notifyDataSetChanged()
                     loading=true
                 }
+
+
             }
-        })
-        viewModel.fetchPopularMovies.observe(viewLifecycleOwner, Observer {
+        })*/
+        /*viewModel.fetchPopularMovies.observe(viewLifecycleOwner, Observer {
             when (it.resourceStatus) {
                 ResourceStatus.LOADING -> {
                     Log.e("fetchPopularMovies", "Loading")
@@ -87,7 +104,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
                         .show()
                 }
             }
-        })
+        })*/
     }
 
     override fun onDestroyView() {
