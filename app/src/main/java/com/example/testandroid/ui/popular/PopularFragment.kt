@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.paging.PagingDataAdapter
@@ -21,6 +22,8 @@ import com.example.testandroid.data.model.ResourceStatus
 import com.example.testandroid.databinding.FragmentPopularBinding
 import com.example.testandroid.utils.PageUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener {
@@ -54,10 +57,15 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
         //recyclerview.adapter = popularMovieItemAdapter
         popularMovieItemAdapter = PopularMovieItemAdapter( this@PopularFragment)
         binding.rvMovies.adapter = popularMovieItemAdapter
-        viewModel.popularMovies.observe(viewLifecycleOwner) {
+        lifecycleScope.launch {
+            viewModel.flow.collectLatest { pagingData ->
+                popularMovieItemAdapter.submitData(pagingData)
+            }
+        }
+        /*viewModel.popularMovies.observe(viewLifecycleOwner) {
             popularMovieItemAdapter.submitData(lifecycle, it)
             //popularMovieItemAdapter = PopularMovieItemAdapter(, this@PopularFragment)
-        }
+        }*/
         /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
             @SuppressLint("NotifyDataSetChanged")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

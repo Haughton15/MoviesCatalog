@@ -1,11 +1,12 @@
 package com.example.testandroid.ui.popular
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.liveData
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.*
 import androidx.paging.*
 import com.example.testandroid.data.entities.MovieEntity
+import com.example.testandroid.data.model.ResourceStatus
 import com.example.testandroid.data.repository.MovieRepository
 import com.example.testandroid.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,10 +32,8 @@ class PopularViewModel @Inject constructor (private val repository: MovieReposit
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieEntity> {
             val page = params.key ?: 1 // página inicial
             var data = emptyList<MovieEntity>() // lista de películas
-            repository.getPopularMovies(page).observeForever {
-                isLoading = false
-                data = it.data ?: emptyList() // lista de películas
-            }
+            val response = repository.getPopularMovies(page)
+            data = response.value!!.data!!
             return LoadResult.Page(
                 data = data,
                 prevKey = if (page == 1) null else page - 1,
@@ -52,5 +51,14 @@ class PopularViewModel @Inject constructor (private val repository: MovieReposit
         config = PagingConfig(pageSize),
         pagingSourceFactory = { popularPagingSource }
     ).liveData
+
+    val flow = Pager(
+        // Configure how data is loaded by passing additional properties to
+        // PagingConfig, such as prefetchDistance.
+        PagingConfig(pageSize = 20)
+    ) {
+        PopularViewModel(repository).popularPagingSource
+    }.flow
+        .cachedIn(viewModelScope)
 
 }
