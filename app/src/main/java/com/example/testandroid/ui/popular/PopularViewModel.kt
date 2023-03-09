@@ -31,7 +31,7 @@ class PopularViewModel @Inject constructor (private val repository: MovieReposit
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieEntity> {
             val page = params.key ?: 1 // página inicial
             val response = repository.getPopularMovies(page)
-            val data = response.value?.data!! // lista de películas
+            val data = response.value?.data ?: emptyList() // lista de películas
             return LoadResult.Page(
                 data = data,
                 prevKey = if (page == 1) null else page - 1,
