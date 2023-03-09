@@ -55,7 +55,7 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
         popularMovieItemAdapter = PopularMovieItemAdapter( this@PopularFragment)
         binding.rvMovies.adapter = popularMovieItemAdapter
         viewModel.popularMovies.observe(viewLifecycleOwner) {
-            adapter.submitData(lifecycle, it)
+            popularMovieItemAdapter.submitData(lifecycle, it)
             //popularMovieItemAdapter = PopularMovieItemAdapter(, this@PopularFragment)
         }
         /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
