@@ -51,11 +51,12 @@ class PopularFragment : Fragment(), PopularMovieItemAdapter.OnMovieClickListener
         super.onViewCreated(view, savedInstanceState)
         val recyclerview = binding.rvMovies
         recyclerview.layoutManager = LinearLayoutManager(context)
-        recyclerview.adapter = popularMovieItemAdapter
-
+        //recyclerview.adapter = popularMovieItemAdapter
+        popularMovieItemAdapter = PopularMovieItemAdapter( this@PopularFragment)
+        binding.rvMovies.adapter = popularMovieItemAdapter
         viewModel.popularMovies.observe(viewLifecycleOwner) {
             adapter.submitData(lifecycle, it)
-            popularMovieItemAdapter = PopularMovieItemAdapter(it, this@PopularFragment)
+            //popularMovieItemAdapter = PopularMovieItemAdapter(, this@PopularFragment)
         }
         /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener()  {
             @SuppressLint("NotifyDataSetChanged")

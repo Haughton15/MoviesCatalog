@@ -12,7 +12,7 @@ import com.example.testandroid.databinding.ItemMovieBinding
 import com.squareup.picasso.Picasso
 
 class PopularMovieItemAdapter(
-    private val moviesList: List<MovieEntity>,
+    //private val moviesList: List<MovieEntity>,
     private val itemClickListener: OnMovieClickListener
 ) : PagingDataAdapter<MovieEntity, PopularMovieItemAdapter.PopularViewHolder>(MyDiffCallback)  {
 
@@ -25,21 +25,21 @@ class PopularMovieItemAdapter(
         return PopularViewHolder(binding)
     }
 
-    override fun getItemCount() = moviesList.size
+    //override fun getItemCount() = moviesList.size
 
     override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
         with(holder){
-            with(moviesList[position]) {
-                binding.titleMovieText.text = title
-                binding.overviewMovieText.text = overview
-                binding.percentageMovieText.text = voteAverage.toString()
-                binding.releaseMovieText.text = releaseDate
+            with(getItem(position)) {
+                binding.titleMovieText.text = this?.title ?: ""
+                binding.overviewMovieText.text = this?.overview ?: ""
+                binding.percentageMovieText.text = this?.voteAverage?.toString() ?: ""
+                binding.releaseMovieText.text = this?.releaseDate ?: ""
                 Picasso.get()
-                    .load("https://image.tmdb.org/t/p/w500" + (posterPath ?: ""))
+                    .load("https://image.tmdb.org/t/p/w500" + (this?.posterPath ?: ""))
                     .into(binding.posterMovieImage)
 
                 holder.itemView.setOnClickListener {
-                    itemClickListener.onMovieClick(this)
+                    this?.let { it1 -> itemClickListener.onMovieClick(it1) }
                 }
             }
         }
